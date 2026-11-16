@@ -505,12 +505,24 @@
       font-size: 0.86rem;
       color: #7dd3fc;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .code-box pre {
       margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
+      white-space: pre;
+      word-break: normal;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .code-box pre::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .code-box pre::-webkit-scrollbar-thumb {
+      background: var(--border-highlight);
+      border-radius: 99px;
     }
 
     .copy-btn {
@@ -675,6 +687,27 @@
       color: var(--text-main);
     }
 
+    /* Standalone Verification & Rollback Cards */
+    .standalone-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .standalone-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+      color: var(--text-main);
+    }
+
+    .standalone-card p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      margin-bottom: 1rem;
+    }
+
     /* Architecture Highlight Callout */
     .arch-split {
       display: grid;
@@ -778,8 +811,8 @@
       border-radius: 5px;
       border: 1px solid var(--border);
       overflow-x: auto;
-      white-space: nowrap;
       -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
     }
 
     .inline-code {
@@ -841,26 +874,29 @@
     /* Mobile Phone Breakpoint */
     @media (max-width: 768px) {
       .nav-container {
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 0.9rem;
       }
       .brand {
-        font-size: 0.95rem;
-        gap: 0.55rem;
+        font-size: 0.9rem;
+        gap: 0.5rem;
       }
       .brand-icon {
-        width: 26px;
-        height: 26px;
-        font-size: 0.78rem;
+        width: 24px;
+        height: 24px;
+        font-size: 0.72rem;
+      }
+      .nav-actions {
+        gap: 0.4rem;
       }
       .nav-actions .btn-secondary {
         display: none;
       }
       .nav-actions .btn-primary {
-        padding: 0.42rem 0.75rem;
-        font-size: 0.8rem;
+        padding: 0.38rem 0.65rem;
+        font-size: 0.76rem;
       }
       .container {
-        padding: 0 1rem;
+        padding: 0 0.9rem;
       }
       .hero {
         padding: 1.75rem 0 2rem;
@@ -1153,18 +1189,17 @@
       </div>
     </section>
 
-    <!-- 2. Tabbed Setup Workflows & ADB Verification -->
+    <!-- 2. Tabbed Setup Workflows & Standalone ADB Verification / Rollback Sections -->
     <section id="workflows">
       <div class="section-header">
         <div class="section-eyebrow">Choose Your Path</div>
-        <h2 class="section-title">Setup Workflows &amp; ADB Verification</h2>
-        <p class="section-desc">Run the automated PowerShell script, use the interactive AI-guided skill on any OS, or audit your TV state manually.</p>
+        <h2 class="section-title">Setup Workflows &amp; Verification</h2>
+        <p class="section-desc">Run the automated PowerShell script, use the interactive AI-guided skill on any OS, or audit and restore your TV state manually.</p>
       </div>
 
       <div class="workflow-tabs">
         <button class="wf-tab active" onclick="switchWorkflow(0)">Option A: Automated PowerShell Script</button>
         <button class="wf-tab" onclick="switchWorkflow(1)">Option B: Interactive AI-Guided Setup</button>
-        <button class="wf-tab" onclick="switchWorkflow(2)">Option C: ADB Verification &amp; Rollback</button>
       </div>
 
       <!-- Panel 0: PowerShell -->
@@ -1220,25 +1255,25 @@ cd tcl-androidtv-optimizer</pre>
         </div>
       </div>
 
-      <!-- Panel 2: Diagnostics & Rollback -->
-      <div class="wf-panel">
-        <div class="step-list">
-          <div class="step-item">
-            <div class="step-title">Verify Projectivy Holds the Native HOME Role &amp; Check Live Free RAM</div>
-            <div class="code-box">
-              <pre id="cmd-diag">adb shell cmd role get-role-holders android.app.role.HOME
+      <!-- Standalone Section 1: ADB Verification & Health Check -->
+      <div class="standalone-card">
+        <h3>ADB Verification &amp; Health Check</h3>
+        <p>Verify that Projectivy holds the native HOME role and inspect live free RAM headroom on your TV:</p>
+        <div class="code-box">
+          <pre id="cmd-diag">adb shell cmd role get-role-holders android.app.role.HOME
 adb shell settings get global standard_max_cached_processes
 adb shell dumpsys meminfo --package-summary</pre>
-              <button class="copy-btn" onclick="copyText('cmd-diag', this)">Copy</button>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-title">One-Click Full Rollback to Factory Defaults</div>
-            <div class="code-box">
-              <pre id="cmd-rollback">.\Restore-Defaults.ps1 -TvIp "192.168.1.xx"</pre>
-              <button class="copy-btn" onclick="copyText('cmd-rollback', this)">Copy</button>
-            </div>
-          </div>
+          <button class="copy-btn" onclick="copyText('cmd-diag', this)">Copy</button>
+        </div>
+      </div>
+
+      <!-- Standalone Section 2: Factory Rollback -->
+      <div class="standalone-card">
+        <h3>One-Click Factory Rollback</h3>
+        <p>Restore your TV to its exact untouched factory state using your pre-change snapshot backups:</p>
+        <div class="code-box">
+          <pre id="cmd-rollback">.\Restore-Defaults.ps1 -TvIp "192.168.1.xx"</pre>
+          <button class="copy-btn" onclick="copyText('cmd-rollback', this)">Copy</button>
         </div>
       </div>
     </section>
