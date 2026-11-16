@@ -513,7 +513,7 @@
       white-space: pre;
       word-break: normal;
       overflow-x: auto;
-      padding-bottom: 2px;
+      padding-bottom: 4px;
     }
 
     .code-box pre::-webkit-scrollbar {
@@ -874,26 +874,43 @@
     /* Mobile Phone Breakpoint */
     @media (max-width: 768px) {
       .nav-container {
-        padding: 0.75rem 0.9rem;
+        padding: 0.75rem 0.85rem;
+        gap: 0.5rem;
+        max-width: 100vw;
       }
       .brand {
-        font-size: 0.9rem;
-        gap: 0.5rem;
+        font-size: 0.85rem;
+        gap: 0.45rem;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .brand span:last-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .brand-icon {
         width: 24px;
         height: 24px;
         font-size: 0.72rem;
+        flex-shrink: 0;
       }
       .nav-actions {
-        gap: 0.4rem;
+        gap: 0.35rem;
+        flex-shrink: 0;
       }
       .nav-actions .btn-secondary {
         display: none;
       }
       .nav-actions .btn-primary {
-        padding: 0.38rem 0.65rem;
-        font-size: 0.76rem;
+        padding: 0.38rem 0.6rem;
+        font-size: 0.74rem;
+      }
+      .menu-toggle {
+        width: 34px;
+        height: 34px;
+        font-size: 1.05rem;
+        flex-shrink: 0;
       }
       .container {
         padding: 0 0.9rem;
@@ -981,7 +998,8 @@
       }
 
       /* Mobile Code Box & Tabs */
-      .wf-panel {
+      .wf-panel,
+      .standalone-card {
         padding: 1.15rem;
       }
       .code-box {
