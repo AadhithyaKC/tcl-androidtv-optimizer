@@ -8,8 +8,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('tcl-tv-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     :root {
+      color-scheme: light;
+
       /* Light Industrial Manual Ground */
       --paper: #f1f2ee;
       --paper-recessed: #e5e7e0;
@@ -30,14 +43,18 @@
       --ink-on-dark: #f2f4f0;
       --ink-on-dark-muted: #a6afb8;
 
+      /* Active Control Surface */
+      --active-bg: #141619;
+      --active-fg: #ffffff;
+
       /* Signal Accents */
       --signal: #c43c11;
       --signal-hover: #a6310c;
+      --signal-ink: #c43c11;
       --signal-soft: #fae7e0;
       --ok: #126b41;
       --ok-bright: #34d399;
       --ok-soft: #def2e8;
-      --warn: #b45309;
 
       /* Type */
       --font-display: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -51,6 +68,37 @@
       --radius-lg: 16px;
       --shadow-hardware: 0 24px 48px -16px rgba(20, 22, 25, 0.24), 0 4px 12px -2px rgba(20, 22, 25, 0.08);
       --shadow-subtle: 0 2px 6px rgba(20, 22, 25, 0.06);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+
+      --paper: #101216;
+      --paper-recessed: #15181e;
+      --paper-raised: #1a1e25;
+      --rule: #272d37;
+      --rule-strong: #394250;
+
+      --chassis: #090b0e;
+      --chassis-elevated: #12151b;
+      --chassis-bezel: #060709;
+      --chassis-rule: #232832;
+
+      --ink: #f1f3f5;
+      --ink-secondary: #b5bec9;
+      --ink-muted: #8c96a4;
+
+      --active-bg: #f1f3f5;
+      --active-fg: #101216;
+
+      --signal: #d64516;
+      --signal-hover: #bd3b11;
+      --signal-ink: #f4784d;
+      --signal-soft: rgba(244, 120, 77, 0.14);
+      --ok: #34d399;
+
+      --shadow-hardware: 0 28px 56px -14px rgba(0, 0, 0, 0.72), 0 6px 16px -2px rgba(0, 0, 0, 0.45);
+      --shadow-subtle: 0 2px 6px rgba(0, 0, 0, 0.32);
     }
 
     *, *::before, *::after {
@@ -76,6 +124,7 @@
       line-height: 1.6;
       font-size: 16px;
       overflow-x: clip;
+      transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
     }
 
     a {
@@ -84,7 +133,7 @@
     }
 
     :focus-visible {
-      outline: 2.5px solid var(--signal);
+      outline: 2.5px solid var(--signal-ink);
       outline-offset: 2px;
       border-radius: 3px;
     }
@@ -102,18 +151,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
     .container {
       width: 100%;
       max-width: 1240px;
@@ -128,6 +165,7 @@
       z-index: 100;
       background: var(--paper);
       border-bottom: 1px solid var(--rule);
+      transition: background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
     }
 
     .nav-bar {
@@ -165,6 +203,7 @@
       height: 22px;
       border-radius: 4px;
       background: var(--chassis);
+      border: 1px solid var(--chassis-rule);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -203,27 +242,50 @@
 
     .nav-links a:hover {
       color: var(--ink);
-      border-bottom-color: var(--signal);
+      border-bottom-color: var(--signal-ink);
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.55rem;
       flex-shrink: 0;
     }
 
-    .menu-btn {
-      display: none;
+    .icon-btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--rule-strong);
       background: var(--paper-raised);
       color: var(--ink);
       cursor: pointer;
+      box-shadow: var(--shadow-subtle);
+      transition: background-color 0.16s var(--ease-out), border-color 0.16s var(--ease-out), color 0.16s var(--ease-out);
+    }
+
+    .icon-btn:hover {
+      border-color: var(--ink);
+      background: var(--paper-recessed);
+    }
+
+    .theme-btn .icon-sun {
+      display: none;
+    }
+
+    [data-theme="dark"] .theme-btn .icon-sun {
+      display: block;
+    }
+
+    [data-theme="dark"] .theme-btn .icon-moon {
+      display: none;
+    }
+
+    .menu-btn {
+      display: none;
     }
 
     .mobile-drawer {
@@ -310,16 +372,7 @@
 
     .btn-outline:hover {
       border-color: var(--ink);
-      background: #ffffff;
-    }
-
-    .btn-dark {
-      background: var(--chassis);
-      color: var(--ink-on-dark);
-    }
-
-    .btn-dark:hover {
-      background: #23272d;
+      background: var(--paper-recessed);
     }
 
     /* ==================== HERO & LIVING-ROOM TV SIMULATOR ==================== */
@@ -347,7 +400,7 @@
     }
 
     .hero h1 .accent-word {
-      color: var(--signal);
+      color: var(--signal-ink);
     }
 
     .hero-lead {
@@ -542,25 +595,30 @@
 
     .proj-app {
       border-radius: 7px;
-      padding: 0.85rem 0.55rem;
+      padding: 0.8rem 0.5rem;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      line-height: 1.15;
       color: #ffffff;
-      border: 2px solid transparent;
-      transition: transform 0.14s var(--ease-out), border-color 0.14s var(--ease-out);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.16s var(--ease-out), border-color 0.16s var(--ease-out);
     }
 
-    .proj-app.focused {
-      border-color: #ffffff;
+    .proj-app:hover {
       transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.28);
     }
 
     .app-nf { background: #b91c1c; }
-    .app-yt { background: #1e293b; }
+    .app-yt { background: #262b33; }
     .app-pv { background: #0369a1; }
-    .app-hs { background: #1d4ed8; }
+    .app-dp { background: #0d2b6b; }
 
     .proj-note {
       font-size: 0.76rem;
@@ -712,8 +770,8 @@
     }
 
     .mode-btn[aria-pressed="true"] {
-      background: var(--chassis);
-      color: #ffffff;
+      background: var(--active-bg);
+      color: var(--active-fg);
     }
 
     .home-test-btn {
@@ -730,13 +788,13 @@
       border-radius: var(--radius-sm);
       cursor: pointer;
       white-space: nowrap;
-      transition: border-color 0.15s ease, background-color 0.15s ease;
+      transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
     }
 
     .home-test-btn:hover {
-      border-color: var(--signal);
+      border-color: var(--signal-ink);
       background: var(--signal-soft);
-      color: var(--signal-hover);
+      color: var(--signal-ink);
     }
 
     .sim-caption {
@@ -766,6 +824,7 @@
       padding: 5rem 0;
       background: var(--chassis);
       color: var(--ink-on-dark);
+      border-bottom: 1px solid var(--chassis-rule);
     }
 
     .section-recessed {
@@ -835,9 +894,9 @@
     }
 
     .ai-choice[aria-pressed="true"] {
-      background: var(--chassis);
-      border-color: var(--chassis);
-      color: #ffffff;
+      background: var(--active-bg);
+      border-color: var(--active-bg);
+      color: var(--active-fg);
     }
 
     .steps-timeline {
@@ -859,7 +918,7 @@
       font-family: var(--font-mono);
       font-size: 0.85rem;
       font-weight: 600;
-      color: var(--signal);
+      color: var(--signal-ink);
     }
 
     .step-col h3 {
@@ -1081,7 +1140,7 @@
     }
 
     .icon-bad {
-      color: var(--signal);
+      color: var(--signal-ink);
       margin-top: 2px;
     }
 
@@ -1154,7 +1213,7 @@
 
     .wb-tab[aria-selected="true"] {
       color: var(--ink);
-      border-bottom-color: var(--signal);
+      border-bottom-color: var(--signal-ink);
     }
 
     .wb-panel {
@@ -1195,6 +1254,7 @@
     .code-row {
       background: var(--chassis);
       color: var(--ink-on-dark);
+      border: 1px solid var(--chassis-rule);
       border-radius: var(--radius-sm);
       padding: 0.85rem 1rem;
       display: flex;
@@ -1251,8 +1311,8 @@
     }
 
     .copy-btn.copied {
-      background: var(--ok);
-      border-color: var(--ok);
+      background: #126b41;
+      border-color: #126b41;
       color: #ffffff;
     }
 
@@ -1379,7 +1439,7 @@
     }
 
     .footer-links a:hover {
-      color: var(--signal);
+      color: var(--signal-ink);
       text-decoration: underline;
     }
 
@@ -1420,24 +1480,27 @@
         padding: 0 1rem;
       }
       .nav-bar {
-        padding: 0.7rem 1rem;
-        gap: 0.5rem;
+        padding: 0.7rem 0.85rem;
+        gap: 0.45rem;
       }
       .brand {
-        font-size: 0.92rem;
-        gap: 0.5rem;
+        font-size: 0.88rem;
+        gap: 0.45rem;
       }
       .brand-mark {
-        width: 24px;
-        height: 19px;
+        width: 22px;
+        height: 18px;
+      }
+      .nav-actions {
+        gap: 0.35rem;
       }
       .nav-actions .btn-sm {
-        padding: 0.48rem 0.72rem;
-        font-size: 0.8rem;
+        padding: 0.46rem 0.65rem;
+        font-size: 0.78rem;
       }
-      .menu-btn {
-        width: 36px;
-        height: 36px;
+      .icon-btn {
+        width: 34px;
+        height: 34px;
       }
       .hero {
         padding: 2.25rem 0 3rem;
@@ -1570,14 +1633,32 @@
       </ul>
 
       <div class="nav-actions">
+        <button class="icon-btn theme-btn" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle dark mode">
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
         <a href="#ai-setup" class="btn btn-signal btn-sm">Start AI Setup</a>
-        <button class="menu-btn" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
-          <svg id="icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+
+        <button class="icon-btn menu-btn" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+          <svg id="icon-menu" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
-          <svg id="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;">
+          <svg id="icon-close" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -1682,10 +1763,10 @@
                   <div class="tv-view-opt">
                     <div class="proj-row-label">Your Apps — Ad-Free Home Screen</div>
                     <div class="proj-apps">
-                      <div class="proj-app app-nf focused">Netflix</div>
+                      <div class="proj-app app-nf">Netflix</div>
                       <div class="proj-app app-yt">YouTube</div>
-                      <div class="proj-app app-pv">Prime</div>
-                      <div class="proj-app app-hs">Hotstar</div>
+                      <div class="proj-app app-pv">Prime Video</div>
+                      <div class="proj-app app-dp">Disney+</div>
                     </div>
                     <div class="proj-note">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1884,7 +1965,7 @@
             </tr>
             <tr>
               <td>
-                <span class="bench-metric-name">Opening Netflix, YouTube &amp; Prime</span>
+                <span class="bench-metric-name">Opening Netflix, YouTube &amp; Prime Video</span>
                 <span class="bench-metric-note">Cold start time after apps are pre-compiled</span>
               </td>
               <td data-label="Factory TCL TV">
@@ -2133,7 +2214,7 @@ adb shell dumpsys meminfo --package-summary</pre>
               <span class="sub-idx tabular">06</span>
               <div class="sub-info">
                 <strong>App Pre-Compilation (AOT)</strong>
-                <span>Compiles Projectivy, Netflix, YouTube, Prime Video, and Hotstar for faster cold launches.</span>
+                <span>Compiles Projectivy, Netflix, YouTube, Prime Video, and Disney+ for faster cold launches.</span>
               </div>
               <div class="sub-cmd">cmd package compile -m speed-profile -f &lt;pkg&gt;</div>
             </div>
@@ -2200,6 +2281,29 @@ adb shell dumpsys meminfo --package-summary</pre>
   </footer>
 
   <script>
+    // Dark Mode Toggle with Persistence
+    const themeToggle = document.getElementById('theme-toggle');
+
+    function syncThemeButtonLabel() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    syncThemeButtonLabel();
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        try { localStorage.setItem('tcl-tv-theme', 'light'); } catch (e) {}
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        try { localStorage.setItem('tcl-tv-theme', 'dark'); } catch (e) {}
+      }
+      syncThemeButtonLabel();
+    });
+
     // Mobile Navigation Drawer
     const menuBtn = document.getElementById('menu-toggle');
     const drawer = document.getElementById('mobile-drawer');
