@@ -324,7 +324,7 @@
       padding-top: 0.75rem;
       border-top: 1px solid var(--rule);
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 0.5rem;
     }
 
@@ -342,6 +342,7 @@
       border: 1px solid transparent;
       cursor: pointer;
       white-space: nowrap;
+      max-width: 100%;
       transition: background-color 0.16s var(--ease-out), border-color 0.16s var(--ease-out), transform 0.16s var(--ease-out), color 0.16s var(--ease-out);
     }
 
@@ -386,6 +387,10 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
       gap: 3.5rem;
       align-items: center;
+    }
+
+    .hero-grid > * {
+      min-width: 0;
     }
 
     .hero h1 {
@@ -477,6 +482,7 @@
       font-size: 0.78rem;
       color: #b4bec9;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 0.5rem;
     }
 
     .tv-mode-tag {
@@ -485,6 +491,7 @@
       gap: 0.4rem;
       font-weight: 600;
       color: #f2f4f0;
+      min-width: 0;
     }
 
     .status-dot {
@@ -492,6 +499,7 @@
       height: 7px;
       border-radius: 50%;
       background: #ef4444;
+      flex-shrink: 0;
     }
 
     .tv-screen[data-mode="optimized"] .status-dot {
@@ -549,11 +557,12 @@
       background: rgba(239, 68, 68, 0.18);
       color: #fca5a5;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .tv-clutter-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 0.5rem;
     }
 
@@ -589,7 +598,7 @@
 
     .proj-apps {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 0.6rem;
     }
 
@@ -664,6 +673,8 @@
       font-family: var(--font-mono);
       font-size: 0.76rem;
       color: #d1d5db;
+      text-align: center;
+      padding: 0 1rem;
     }
 
     /* Live Telemetry Strip inside TV */
@@ -672,7 +683,7 @@
       border-top: 1px solid rgba(255, 255, 255, 0.09);
       padding: 0.75rem 1.05rem;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.65rem;
     }
 
@@ -747,7 +758,7 @@
 
     .mode-switch {
       display: inline-grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       background: var(--paper-recessed);
       padding: 3px;
       border-radius: var(--radius-sm);
@@ -912,6 +923,7 @@
       gap: 0.65rem;
       padding-top: 1.25rem;
       border-top: 2px solid var(--ink);
+      min-width: 0;
     }
 
     .step-num {
@@ -943,10 +955,13 @@
       border-radius: var(--radius-sm);
       padding: 0.6rem 0.75rem;
       line-height: 1.5;
+      overflow-wrap: break-word;
     }
 
     /* Action Launchpad Bar */
     .launchpad-box {
+      width: 100%;
+      max-width: 100%;
       background: var(--paper);
       border: 1px solid var(--rule-strong);
       border-radius: var(--radius-md);
@@ -955,6 +970,12 @@
       grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
       gap: 2rem;
       align-items: center;
+      overflow: hidden;
+    }
+
+    .launchpad-box > * {
+      min-width: 0;
+      max-width: 100%;
     }
 
     .launchpad-box h3 {
@@ -963,18 +984,22 @@
       font-weight: 800;
       margin-bottom: 0.45rem;
       letter-spacing: -0.02em;
+      overflow-wrap: break-word;
     }
 
     .launchpad-box p {
       font-size: 0.94rem;
       color: var(--ink-secondary);
       margin-bottom: 1.15rem;
+      overflow-wrap: break-word;
     }
 
     .launchpad-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 0.65rem;
+      min-width: 0;
+      max-width: 100%;
     }
 
     .starter-prompt-box {
@@ -983,13 +1008,15 @@
       border-radius: var(--radius-sm);
       padding: 1rem 1.1rem;
       min-width: 0;
+      max-width: 100%;
     }
 
     .starter-prompt-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
       margin-bottom: 0.55rem;
     }
 
@@ -1003,6 +1030,8 @@
       font-size: 0.86rem;
       color: var(--ink-secondary);
       line-height: 1.5;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     /* ==================== BENCHMARKS LEDGER (DARK HARDWARE BAND) ==================== */
@@ -1099,6 +1128,10 @@
       border-top: 1px solid var(--rule-strong);
     }
 
+    .safety-block {
+      min-width: 0;
+    }
+
     .safety-block h3 {
       font-family: var(--font-display);
       font-size: 1.35rem;
@@ -1146,10 +1179,14 @@
 
     .untouched-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 0.85rem 1.25rem;
       padding-top: 0.75rem;
       border-top: 1px solid var(--rule);
+    }
+
+    .untouched-item {
+      min-width: 0;
     }
 
     .untouched-item strong {
@@ -1172,6 +1209,7 @@
       color: var(--ink);
       padding: 0.12rem 0.38rem;
       border-radius: 4px;
+      overflow-wrap: anywhere;
     }
 
     .section-recessed code.inline {
@@ -1358,6 +1396,10 @@
       color: var(--ink-muted);
     }
 
+    .sub-info {
+      min-width: 0;
+    }
+
     .sub-info strong {
       display: block;
       font-size: 0.94rem;
@@ -1401,6 +1443,11 @@
       padding-bottom: 2.25rem;
       border-bottom: 1px solid var(--rule);
       margin-bottom: 1.5rem;
+    }
+
+    .footer-top > * {
+      min-width: 0;
+      max-width: 100%;
     }
 
     .footer-top h2 {
@@ -1452,19 +1499,19 @@
         display: inline-flex;
       }
       .hero-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 2.5rem;
       }
       .steps-timeline {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 1.75rem;
       }
       .launchpad-box {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 1.5rem;
       }
       .safety-split {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 2.5rem;
       }
       .sub-row {
@@ -1497,6 +1544,7 @@
       .nav-actions .btn-sm {
         padding: 0.46rem 0.65rem;
         font-size: 0.78rem;
+        white-space: nowrap;
       }
       .icon-btn {
         width: 34px;
@@ -1510,16 +1558,18 @@
       }
       .hero-actions .btn {
         width: 100%;
+        white-space: normal;
+        text-align: center;
       }
       .tv-screen {
         min-height: 280px;
       }
       .tv-clutter-row,
       .proj-apps {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
       .tv-telemetry {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       }
       .tv-telemetry > div:last-child {
         grid-column: 1 / -1;
@@ -1542,16 +1592,27 @@
         padding: 3.25rem 0;
       }
       .launchpad-box {
-        padding: 1.25rem;
+        padding: 1.15rem;
+        gap: 1.25rem;
       }
       .launchpad-buttons {
         flex-direction: column;
+        width: 100%;
       }
       .launchpad-buttons .btn {
         width: 100%;
+        padding: 0.74rem 1rem;
+        font-size: 0.88rem;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+      .starter-prompt-box {
+        padding: 0.9rem;
       }
       .untouched-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
       .wb-panel {
         padding: 1.15rem;
@@ -1561,7 +1622,7 @@
         align-items: stretch;
         padding: 0.85rem;
       }
-      .copy-btn {
+      .code-row .copy-btn {
         width: 100%;
         justify-content: center;
       }
